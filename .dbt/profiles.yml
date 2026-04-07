@@ -1,0 +1,13 @@
+my_snowflake_profile:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: JDONQOA-JN91073
+      user: IVANKURNIA92
+      password: Snowflake12345
+      role: AIRFLOW_ROLE
+      warehouse: COMPUTE_WH
+      database: DBT_DEV_DB
+      schema: PUBLIC 
+      threads: 1

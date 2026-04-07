@@ -1,0 +1,73 @@
+models:
+  - name: dim_customer
+    tests:
+      - unique:
+          column_name: customer_id
+          config:
+            where: "row_status = 'CURRENT'"
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+
+  - name: dim_employee
+    tests:
+      - unique:
+          column_name: employee_id
+          config:
+            where: "row_status = 'CURRENT'"
+    columns:
+      - name: employee_id
+        tests:
+          - not_null
+
+  - name: dim_product
+    tests:
+      - unique:
+          column_name: product_id
+          config:
+            where: "row_status = 'CURRENT'"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          
+  # --- TESTING FACTS ---
+  - name: fact_sales
+    description: "Tabel fakta transaksi penjualan"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_id
+
+  - name: fact_inventory
+    description: "Tabel fakta pergerakan stok barang"
+    columns:
+      - name: inventory_transaction_id
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+
+  - name: fact_purchase_order
+    description: "Tabel fakta pesanan pembelian ke supplier"
+    columns:
+      - name: purchase_order_id
+        tests:
+          - not_null

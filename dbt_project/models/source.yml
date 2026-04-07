@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: snowflake_raw
+    database: DBT_DEV_DB
+    schema: PUBLIC_1_RAW
+    # Menambahkan config quoting agar dbt otomatis pakai " " pada nama tabel/kolom
+    quoting:
+      database: true
+      schema: true
+      identifier: true
+    tables:
+      - name: CUSTOMER  # Sesuaikan dengan di Snowflake (tadi terlihat 'CUSTOMER')
+        identifier: CUSTOMER 
+      - name: ORDERS
+        identifier: ORDERS
+      - name: INVENTORY_TRANSACTIONS
+        identifier: INVENTORY_TRANSACTIONS
+      - name: EMPLOYEES
+        identifier: EMPLOYEES
+      - name: ORDER_DETAILS 
+        identifier: ORDER_DETAILS
+      - name: PRODUCTS
+        identifier: PRODUCTS
+      - name: SUPPLIERS
+        identifier: SUPPLIERS
+      - name: PURCHASE_ORDERS
+        identifier: PURCHASE_ORDERS
+      - name: PURCHASE_ORDER_DETAILS
+        identifier: PURCHASE_ORDER_DETAILS

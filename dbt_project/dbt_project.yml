@@ -1,0 +1,22 @@
+name: 'my_project'
+version: '1.0'
+profile: 'my_snowflake_profile'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+models:
+  my_project:
+    # Semua model di folder models/staging akan jadi VIEW di schema STAGING
+    staging:
+      +materialized: table
+      +schema: PUBLIC_2_STAGING
+    
+    mart:
+      +materialized: table
+      +schema: PUBLIC_3_MART
+    
+  
