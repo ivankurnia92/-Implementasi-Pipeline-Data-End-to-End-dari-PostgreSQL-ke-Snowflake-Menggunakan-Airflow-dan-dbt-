@@ -1,12 +1,10 @@
-# 🚀 Northwind Modern Data Pipeline (PostgreSQL → Snowflake → BI)
+# Northwind Modern Data Pipeline (PostgreSQL → Snowflake → BI)
 
 > End-to-end **Modern Data Stack** project implementing **ELT (Extract, Load, Transform)** using the Northwind dataset — from OLTP system to analytics-ready warehouse with **Star Schema** and BI dashboarding.
 
-![Pipeline](https://img.shields.io/badge/Pipeline-ELT-blue) ![Airflow](https://img.shields.io/badge/Airflow-2.7.1-green) ![dbt](https://img.shields.io/badge/dbt-1.7.19-orange) ![Snowflake](https://img.shields.io/badge/Snowflake-✓-lightblue) ![Docker](https://img.shields.io/badge/Docker-✓-blue)
-
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 This project demonstrates how to build a **production-style data pipeline** using modern tools:
 
@@ -20,7 +18,7 @@ All components run inside **Docker**, ensuring reproducibility and easy setup.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```text
 PostgreSQL (OLTP)
@@ -36,7 +34,7 @@ BI Layer (Metabase)
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer          | Technology           | Description                       |
 | -------------- | -------------------- | --------------------------------- |
@@ -51,7 +49,7 @@ BI Layer (Metabase)
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```bash
 .
@@ -74,7 +72,7 @@ BI Layer (Metabase)
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone Repository
 
@@ -125,7 +123,7 @@ docker compose ps
 
 ---
 
-## ⚙️ Airflow Setup
+##  Airflow Setup
 
 Create connections:
 
@@ -238,12 +236,3 @@ Example dashboards:
 
 ---
 
-## 👨‍💻 Author
-
-Built as part of a **Data Engineering / Analytics Engineering Portfolio Project**.
-
----
-
-## ⭐️ Support
-
-If you find this project useful, consider giving it a ⭐ on GitHub!
