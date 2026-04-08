@@ -1,13 +1,15 @@
+version: '3.8'
+
 x-airflow-common: &airflow-common
   build: .
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
   environment:
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
-
-    # Optional (kalau mau pakai env Snowflake)
     SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
     SNOWFLAKE_USER: ${SNOWFLAKE_USER}
     SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
@@ -15,21 +17,19 @@ x-airflow-common: &airflow-common
     SNOWFLAKE_SCHEMA: ${SNOWFLAKE_SCHEMA}
     SNOWFLAKE_WAREHOUSE: ${SNOWFLAKE_WAREHOUSE}
     SNOWFLAKE_ROLE: ${SNOWFLAKE_ROLE}
-
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ./dbt_project:/opt/airflow/dbt_project
     - ./.dbt:/home/airflow/.dbt
-
   depends_on:
     postgres:
       condition: service_healthy
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -38,6 +38,7 @@ services:
       - "5433:5432"
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+      - ./init_sql:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
@@ -46,32 +47,46 @@ services:
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
-    command: >
-      -c "
-      airflow db migrate &&
-      airflow users create
-        --username airflow
-        --password airflow
-        --firstname admin
-        --lastname user
-        --role Admin
-        --email admin@example.com
-      "
+    command:
+      - -c
+      - |
+        airflow db migrate &&
+        airflow users create \
+          --username airflow \
+          --password airflow \
+          --firstname admin \
+          --lastname user \
+          --role Admin \
+          --email admin@example.com
 
   airflow-webserver:
     <<: *airflow-common
     command: webserver
     ports:
       - "8080:8080"
-      - "8081:8081"
     depends_on:
-      - airflow-init
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
 
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
     depends_on:
-      - airflow-init
+      postgres:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully
+
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: h2
+    restart: always
 
 volumes:
   postgres-db-volume:

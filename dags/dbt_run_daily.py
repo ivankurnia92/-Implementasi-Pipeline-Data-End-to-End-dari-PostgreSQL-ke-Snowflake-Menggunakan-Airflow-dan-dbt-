@@ -14,7 +14,7 @@ default_args = {
 }
 
 with DAG(
-    'dbt_northwind_gold_pipeline',
+    'dbt_northwind_transformation',
     default_args=default_args,
     description='Pipeline harian untuk pembaruan Gold Layer Northwind',
     schedule_interval='0 2 * * *',  # Jam 02:00 AM setiap hari
